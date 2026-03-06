@@ -26,13 +26,13 @@ Key derived facts — multi-state allocation calculations, basis tracking decisi
 **4. User-provided corrections**
 Explicit overrides logged to persistent memory. Prior errors don't carry forward.
 
-## The $[NY_TAX_DIFFERENCE] catch
+## The `$[NY_TAX_DIFFERENCE]` catch
 
 The filing software pre-filled a state income field with the full federal W-2 figure instead of the actual state-sourced income — a common error for RSU income allocated across multiple states based on work location during the vesting period.
 
-- **Pre-filled figure:** ~$[W2_WAGES]
-- **Correct state-sourced allocation:** ~$[NY_ALLOCATED_WAGES]
-- **Tax liability difference:** ~$[NY_TAX_DIFFERENCE]
+- **Pre-filled figure:** ~`$[W2_WAGES]`
+- **Correct state-sourced allocation:** ~`$[NY_ALLOCATED_WAGES]`
+- **Tax liability difference:** ~`$[NY_TAX_DIFFERENCE]`
 
 When I flagged it, the software generated an alert recommending I restore the pre-filled figure. The system identified the alert as incorrect, explained the multi-state allocation methodology, cited the relevant IRS guidance, and walked through the correct calculation.
 

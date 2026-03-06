@@ -90,10 +90,7 @@ New York Nonresident (IT-203)        ← W-2 Box 17: $[NY_WITHHELD] withheld | A
 Washington State                     ← No income tax; current domicile
 ```
 
-**Critical NY allocation insight:** 
-Box 16 for NY shows $[W2_WAGES] (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. 
-The correct NY-sourced wage figure (~$[NY ALLOCATED WAGES]) is back-calculated from the $[NY WITHHELD] withholding amount. 
-Accepting the W-2 face value would generate ~$[NY TAX DIFFERENCE] in excess NY tax liability.
+**Critical NY allocation insight:** Box 16 for NY shows `$[W2_WAGES]` (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. The correct NY-sourced wage figure (~`$[NY_ALLOCATED_WAGES]`) is back-calculated from the `$[NY_WITHHELD]` withholding amount. Accepting the W-2 face value would generate ~`$[NY_TAX_DIFFERENCE]` in excess NY tax liability.
 
 ---
 
@@ -145,11 +142,11 @@ Total Federal Tax Withheld:    $[TOTAL_FED_WITHHELD]
 **What it does:** When FreeTaxUSA (or any filing software) generates an alert or recommendation, the assistant evaluates it independently rather than deferring to the software's framing.
 
 **Documented example — NY Wage Alert:**
-- Software pre-filled: $[W2_WAGES] as NY wages
-- Software issued alert recommending reversion to $[W2_WAGES]
-- Assistant analysis: Withholding of $[NY_WITHHELD] implies ~[RATE]% effective rate on $20,000, or ~[RATE]% on $[W2_WAGES] — the latter is implausible
-- Correct entry confirmed: ~$[NY_ALLOCATED_WAGES] (back-calculated from withholding)
-- Stakes: Accepting the alert's recommendation would have generated ~$[NY_TAX_DIFFERENCE] in excess NY tax
+- Software pre-filled: `$[W2_WAGES]` as NY wages
+- Software issued alert recommending reversion to `$[W2_WAGES]`
+- Assistant analysis: Withholding of `$[NY_WITHHELD]` implies ~`[RATE]`% effective rate on $20,000, or ~`[RATE]`% on `$[W2_WAGES]` — the latter is implausible
+- Correct entry confirmed: ~`$[NY_ALLOCATED_WAGES]` (back-calculated from withholding)
+- Stakes: Accepting the alert's recommendation would have generated ~`$[NY_TAX_DIFFERENCE]` in excess NY tax
 
 **How it contributes:** Treats software alerts as hypotheses, not authorities. Each alert gets its own independent analysis.
 
@@ -196,10 +193,10 @@ Total Federal Tax Withheld:    $[TOTAL_FED_WITHHELD]
 **What it does:** Synthesizes multi-year financial data into a single-page dashboard covering income trajectory, 401(k) growth, effective tax rates, net worth components, and millionaire-milestone projections.
 
 **Key metrics tracked:**
-- 8-year income CAGR: [INCOME_CAGR]%
-- 2025 effective federal rate: [EFF_TAX_RATE]%
+- 8-year income CAGR: `[INCOME_CAGR]`%
+- 2025 effective federal rate: `[EFF_TAX_RATE]`%
 - 401(k) balance trajectory (Q2 2023 → Q4 2025)
-- Net worth milestone progress ($[NET_WORTH_1] by 2027, $[NET_WORTH_2] by 2032)
+- Net worth milestone progress (`$[NET_WORTH_1]` by 2027, `$[NET_WORTH_2]` by 2032)
 
 ---
 
@@ -354,10 +351,10 @@ The Tax Assistant is designed to operate alongside FreeTaxUSA as the filing plat
 
 | Filing Software Field | Source in Assistant | Notes |
 |---|---|---|
-| W-2 Box 1 wages | `2025_Tax_Filing_Prefill.md` | $[W2_WAGES] |
-| Federal tax withheld | Prefill doc | $[TOTAL_FED_WITHHELD] (W-2 + 1099-R) |
-| IL state wages | W-2 Box 16 (IL row) | $[IL_WAGES] — enter directly |
-| NY state wages | Back-calculated | ~$[NY_ALLOCATED_WAGES] — NOT W-2 Box 16 |
+| W-2 Box 1 wages | `2025_Tax_Filing_Prefill.md` | `$[W2_WAGES]` |
+| Federal tax withheld | Prefill doc | `$[TOTAL_FED_WITHHELD]` (W-2 + 1099-R) |
+| IL state wages | W-2 Box 16 (IL row) | `$[IL_WAGES]` — enter directly |
+| NY state wages | Back-calculated | ~`$[NY_ALLOCATED_WAGES]` — NOT W-2 Box 16 |
 | Prior-year AGI (federal) | IRS workaround | $0 (2024 return unprocessed) |
 | Prior-year AGI (IL field) | Actual figure | Real AGI — different field, different rule |
 
@@ -385,12 +382,12 @@ The assistant operates under a conservative compliance posture with three tiers 
 **Illinois (Nonresident):**
 - IL nonresident files IL-1040-NR [86 Ill. Adm. Code 100.3020]
 - Wages sourced to IL based on actual days worked in state
-- IL Box 16 wages ($[IL_WAGES]) accepted as reported by employer
+- IL Box 16 wages (`$[IL_WAGES]`) accepted as reported by employer
 
 **New York (Nonresident):**
 - NY nonresident files IT-203 [NY Tax Law §631]
 - NY source income = wages earned while physically present in NY or attributable to NY work
-- W-2 Box 16 (NY) shows $[W2_WAGES] — treated as formatting artifact; actual sourced amount ~$[NY_ALLOCATED_WAGES]
+- W-2 Box 16 (NY) shows `$[W2_WAGES]` — treated as formatting artifact; actual sourced amount ~`$[NY_ALLOCATED_WAGES]`
 - Withholding-implied allocation used as primary derivation method
 
 ### Audit Risk Assessment Protocol
@@ -402,8 +399,8 @@ For any position that deviates from a straightforward reading of a tax form, the
 3. **Precedent** — Is there IRS guidance or case law supporting the position?
 
 The NY wage allocation is assessed as **low audit risk** because:
-- The withholding-implied amount ($[NY_ALLOCATED_WAGES] at ~7% effective rate) is entirely plausible
-- [EMPLOYER]'s payroll system generated the withholding based on actual NY work performed
+- The withholding-implied amount (`$[NY_ALLOCATED_WAGES]` at ~7% effective rate) is entirely plausible
+- `[EMPLOYER]`'s payroll system generated the withholding based on actual NY work performed
 - The filing will include full W-2 documentation showing the withholding basis
 
 ---
@@ -588,7 +585,7 @@ def test_citations_present(response_text: str):
 
 | Test | Input | Expected | Fail condition |
 |---|---|---|---|
-| NY wage override | W-2 Box 16 NY = $[W2_WAGES] | System flags; uses ~$[NY_ALLOCATED_WAGES] | System accepts $[W2_WAGES] |
+| NY wage override | W-2 Box 16 NY = `$[W2_WAGES]` | System flags; uses ~`$[NY_ALLOCATED_WAGES]` | System accepts `$[W2_WAGES]` |
 | AGI field scope | $0 AGI instruction | Applied to federal field only | Applied to IL AGI field |
 | Software alert | FreeTaxUSA alert to revert NY wages | Alert analyzed independently | Alert accepted without analysis |
 | IRA penalty check | 1099-R code 1 | 10% penalty flagged | Penalty missed |
@@ -599,13 +596,13 @@ def test_citations_present(response_text: str):
 
 ### Near-Term (Q2 2026)
 
-- **1099-B Integration:** Once the [BROKERAGE] 1099-B arrives (~Feb 2026), add Form 8949 / Schedule D prefill generation to the pipeline. This includes wash sale adjustment tracking and RSU cost basis verification.
+- **1099-B Integration:** Once the `[BROKERAGE]` 1099-B arrives (~Feb 2026), add Form 8949 / Schedule D prefill generation to the pipeline. This includes wash sale adjustment tracking and RSU cost basis verification.
 - **Post-filing reconciliation doc:** After e-filing, generate a "what we filed" summary document capturing final values for all three returns (federal, IL, NY) for the project knowledge base.
 - **2024 return resolution tracking:** Update `2024_IRS_Return_Status.md` once the return processes; verify capital gains reporting matches the filed amounts.
 
 ### Medium-Term (2026 Tax Year Planning)
 
-- **W-4 optimization workflow:** Model 2026 withholding scenarios based on expected RSU vest schedule. Goal: achieve ~$[REFUND_TARGET] refund (down from current ~$[OVER_WITHHELD] over-withholding).
+- **W-4 optimization workflow:** Model 2026 withholding scenarios based on expected RSU vest schedule. Goal: achieve ~`$[REFUND_TARGET]` refund (down from current ~`$[OVER_WITHHELD]` over-withholding).
 - **Covered call income tracking:** As the covered call strategy generates premium income, add a tracking layer for short-term capital gains from options expiration/assignment.
 - **Quarterly estimated tax assessment:** Evaluate whether side income (if any consulting materializes) triggers estimated payment requirements.
 
@@ -622,13 +619,11 @@ def test_citations_present(response_text: str):
 
 ### Use Case 1: Multi-State W-2 Wage Allocation
 
-**Situation:** Taxpayer receives a W-2 showing $[W2_WAGES] as NY state wages (Box 16), but only worked in NY briefly in 2025.
+**Situation:** Taxpayer receives a W-2 showing `$[W2_WAGES]` as NY state wages (Box 16), but only worked in NY briefly in 2025.
 
-**Problem without assistant:** Filing software pre-fills NY wages at $[W2_WAGES]. Taxpayer may not recognize this as a formatting artifact rather than an accurate allocation. Filing with this figure generates ~$[NY_TAX_DIFFERENCE] in excess NY tax.
+**Problem without assistant:** Filing software pre-fills NY wages at `$[W2_WAGES]`. Taxpayer may not recognize this as a formatting artifact rather than an accurate allocation. Filing with this figure generates ~`$[NY_TAX_DIFFERENCE]` in excess NY tax.
 
 **Interaction flow:**
-```
-User:      FreeTaxUSA is showing $[W2_WAGES] for NY wages. Is that right?
 ```
 User:      FreeTaxUSA is showing $[W2_WAGES] for NY wages. Is that right?
 Assistant: That figure looks like a W-2 formatting artifact. Here's the analysis:
@@ -645,7 +640,7 @@ Assistant: No — the alert should be evaluated independently. The alert is reco
            actual NY-sourced income. The ~$[NY_ALLOCATED_WAGES] figure remains the correct entry.
 ```
 
-**Value delivered:** ~$[NY_TAX_DIFFERENCE] in avoided excess NY tax liability. The key behavior is treating the software alert as a hypothesis, not an authority.
+**Value delivered:** ~`$[NY_TAX_DIFFERENCE]` in avoided excess NY tax liability. The key behavior is treating the software alert as a hypothesis, not an authority.
 
 ---
 
@@ -712,7 +707,7 @@ Assistant: RSU cost basis errors are one of the most common
            each lot against your RSU_Vesting_History.xlsx.
 ```
 
-**Value delivered:** Prevented double-taxation on RSU income by ensuring correct cost basis is reported even when [BROKERAGE]'s automated reporting may understate it.
+**Value delivered:** Prevented double-taxation on RSU income by ensuring correct cost basis is reported even when `[BROKERAGE]`'s automated reporting may understate it.
 
 ---
 
@@ -723,11 +718,11 @@ Assistant: RSU cost basis errors are one of the most common
 **Problem without assistant:** Data is scattered across 8+ Excel files covering paycheck history, 401(k) contributions, brokerage statements, and RSU vesting records.
 
 **Output:** The `Financial_KPIs.md` document synthesizes:
-- 8-year income CAGR ([INCOME_CAGR]% from $[PRIOR_INCOME] to $[W2_WAGES])
+- 8-year income CAGR (`[INCOME_CAGR]`% from `$[PRIOR_INCOME]` to `$[W2_WAGES]`)
 - 401(k) trajectory with projected balance at retirement
-- Effective tax rate trend ([AVG_EFF_RATE]% average; [EFF_TAX_RATE]% in 2025)
-- Net worth milestone timeline ($[NET_WORTH_1] by 2027, $[NET_WORTH_2] by ~2032–2035)
-- Washington state tax savings vs. prior IL residency (~$[STATE_TAX_SAVINGS]+/year)
+- Effective tax rate trend (`[AVG_EFF_RATE]`% average; `[EFF_TAX_RATE]`% in 2025)
+- Net worth milestone timeline (`$[NET_WORTH_1]` by 2027, `$[NET_WORTH_2]` by ~2032–2035)
+- Washington state tax savings vs. prior IL residency (~`$[STATE_TAX_SAVINGS]`+/year)
 
 **Value delivered:** A single-page financial dashboard derived from the same documents used for tax preparation, with no additional data entry required.
 

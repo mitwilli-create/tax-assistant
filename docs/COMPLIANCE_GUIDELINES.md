@@ -1,7 +1,7 @@
 # Tax Assistant — Compliance Guidelines
 
 Multi-Jurisdictional Tax Compliance Requirements  |  Version 1.0  |  Tax Year 2025
-Prepared by: [FILER_NAME]  |  Filing Profile: WA Resident / IL & NY Nonresident
+Prepared by: `[FILER_NAME]`  |  Filing Profile: WA Resident / IL & NY Nonresident
 
 DISCLAIMER
 This document is for informational and organizational purposes in connection with the Tax Assistant project. It doesn't constitute legal or tax advice. Consult a licensed CPA or tax attorney for jurisdiction-specific compliance determinations. All IRS publication references reflect 2025 guidance and should be verified at irs.gov for any subsequent changes.
@@ -15,7 +15,7 @@ This compliance guide governs the Tax Assistant's operation for a taxpayer with 
 | Tax Year | 2025 (filing in 2026) |
 | Domicile State | Washington (no state income tax) |
 | Prior Residency | Illinois (through part of 2024); New York (earlier periods) |
-| Employer | [EMPLOYER] — W-2 income with RSU vesting |
+| Employer | `[EMPLOYER]` — W-2 income with RSU vesting |
 | Federal Filing Status | Single |
 | Return Types Required | Federal Form 1040; IL Form IL-1040 (nonresident); NY Form IT-203 (nonresident) |
 | Key Income Sources | W-2 wages, RSU vesting income, dividends (1099-DIV), IRA distribution (1099-R), capital gains (1099-B pending) |
@@ -28,10 +28,10 @@ All income from all sources must be reported on Form 1040, regardless of whether
 
 **W-2 Wage Income**
 IRS Publication 525 | Taxable and Nontaxable Income: Wages, salaries, and tips are fully includible in gross income under IRC Section 61.
-- Box 1 wages ($[W2_WAGES]) are entered on Form 1040, Line 1a
-- Box 12 Code AA (Roth 401k contributions: $[ROTH_401K]) are post-tax and don't reduce Box 1
-- Box 12 Code D (Traditional 401k: $[TRAD_401K]) is pre-tax and already excluded from Box 1
-- Box 12 Code DD (employer health coverage: $[HEALTH_COVERAGE]) is informational only — not taxable
+- Box 1 wages (`$[W2_WAGES]`) are entered on Form 1040, Line 1a
+- Box 12 Code AA (Roth 401k contributions: `$[ROTH_401K]`) are post-tax and don't reduce Box 1
+- Box 12 Code D (Traditional 401k: `$[TRAD_401K]`) is pre-tax and already excluded from Box 1
+- Box 12 Code DD (employer health coverage: `$[HEALTH_COVERAGE]`) is informational only — not taxable
 - Box 14 WAVPFLEE/WAVPMLEE are Washington state leave fund entries — not deductible federally
 
 **RSU Income**
@@ -39,28 +39,28 @@ IRS Publication 525 | Stock Options and Other Equity Compensation: RSU income is
 IRC Section 83(b) | Property Transferred in Connection with Performance of Services: FMV at vesting date becomes the cost basis for subsequent capital gain calculation.
 
 COMPLIANCE REQUIREMENT
-Verify that [BROKERAGE] reports the adjusted (stepped-up) cost basis on Form 1099-B for all RSU lot dispositions. The cost basis should equal the FMV at vesting, which was already taxed as ordinary income via the W-2. Failure to use the correct basis results in double taxation.
+Verify that `[BROKERAGE]` reports the adjusted (stepped-up) cost basis on Form 1099-B for all RSU lot dispositions. The cost basis should equal the FMV at vesting, which was already taxed as ordinary income via the W-2. Failure to use the correct basis results in double taxation.
 
 **IRA Distribution**
 IRS Publication 590-B | Distributions from Individual Retirement Arrangements: Early distributions (before age 59.5) are subject to ordinary income tax plus 10% additional tax under IRC Section 72(t), unless an exception applies.
 - Distribution code 1 on 1099-R confirms early distribution with no known exception
-- $[IRA_DIST] is includible in gross income on Form 1040, Line 4b
-- 10% additional tax applies: $[IRA_PENALTY] penalty reported on Schedule 2, Line 8
+- `$[IRA_DIST]` is includible in gross income on Form 1040, Line 4b
+- 10% additional tax applies: `$[IRA_PENALTY]` penalty reported on Schedule 2, Line 8
 - Review IRC Section 72(t)(2) exceptions before finalizing — qualified higher education, first-time homebuyer, disability, and others may apply
 
 **Capital Gains (1099-B — Pending)**
 IRS Publication 550 | Investment Income and Expenses: Capital gains and losses from stock sales are reported on Form 8949 and Schedule D.
 - Short-term gains (held 12 months or less) taxed as ordinary income
 - Long-term gains (held more than 12 months) taxed at preferential rates: 0%, 15%, or 20%
-- At the filer's income level ($[W2_WAGES]), the applicable long-term rate is 15% (below $518,901 single threshold for 2025)
+- At the filer's income level (`$[W2_WAGES]`), the applicable long-term rate is 15% (below $518,901 single threshold for 2025)
 - Net Investment Income Tax (NIIT): 3.8% applies to net investment income above $200,000 (single). Dividends and capital gains are subject to NIIT.
 - IRC Section 1411 | Imposition of Tax: NIIT of 3.8% applies to lesser of net investment income or the excess of MAGI over threshold.
 
 **Dividend Income**
 IRS Publication 550 | Dividend Income: Qualified dividends meeting holding period requirements are taxed at preferential capital gains rates.
-- Total ordinary dividends: $[DIVIDENDS] — reported on Form 1040, Line 3b
-- Qualified dividends: $[DIVIDENDS] — reported on Form 1040, Line 3a; taxed at 15% rate
-- Verify with [BROKERAGE] 1099-DIV that holding periods were satisfied for qualified treatment
+- Total ordinary dividends: `$[DIVIDENDS]` — reported on Form 1040, Line 3b
+- Qualified dividends: `$[DIVIDENDS]` — reported on Form 1040, Line 3a; taxed at 15% rate
+- Verify with `[BROKERAGE]` 1099-DIV that holding periods were satisfied for qualified treatment
 
 ### 2.2 Deduction Compliance
 
@@ -71,7 +71,7 @@ The filer will take the standard deduction. No itemized deduction analysis requi
 ### 2.3 Additional Medicare Tax
 
 IRS Form 8959 Instructions | Additional Medicare Tax: 0.9% Additional Medicare Tax applies to wages exceeding $200,000 for single filers.
-W-2 Box 5 Medicare wages are $[MEDICARE_WAGES], exceeding the $200,000 threshold by $[MEDICARE_EXCESS]. The employer is required to withhold 0.9% on wages above $200,000. W-2 Box 6 ($[MEDICARE_TAX]) includes both standard 1.45% Medicare tax and the additional 0.9% on amounts above $200,000.
+W-2 Box 5 Medicare wages are `$[MEDICARE_WAGES]`, exceeding the $200,000 threshold by `$[MEDICARE_EXCESS]`. The employer is required to withhold 0.9% on wages above $200,000. W-2 Box 6 (`$[MEDICARE_TAX]`) includes both standard 1.45% Medicare tax and the additional 0.9% on amounts above $200,000.
 
 ### 2.4 Prior Year AGI Verification
 
@@ -83,35 +83,35 @@ The 2024 federal return hasn't been processed by the IRS as of March 2026. When 
 ### 3.1 Filing Obligation
 
 Illinois Department of Revenue | Publication 102: Sales, Use, and Other Taxes: Nonresidents must file Form IL-1040 if they earned income from Illinois sources.
-The filer is required to file Illinois Form IL-1040 (nonresident) because [EMPLOYER] withheld Illinois income tax ($[IL_WITHHELD]), reflecting wages earned while physically working in Illinois during 2025.
+The filer is required to file Illinois Form IL-1040 (nonresident) because `[EMPLOYER]` withheld Illinois income tax (`$[IL_WITHHELD]`), reflecting wages earned while physically working in Illinois during 2025.
 
 ### 3.2 Illinois Wage Allocation
 
-- IL W-2 Box 16 State Wages: $[IL_WAGES] — represents wages [EMPLOYER] allocated to Illinois based on days worked in state
-- IL W-2 Box 17 State Tax Withheld: $[IL_WITHHELD]
+- IL W-2 Box 16 State Wages: `$[IL_WAGES]` — represents wages `[EMPLOYER]` allocated to Illinois based on days worked in state
+- IL W-2 Box 17 State Tax Withheld: `$[IL_WITHHELD]`
 - Illinois taxes nonresident income at 4.95% flat rate on Illinois-source income
-- Expected IL tax on $[IL_WAGES]: approximately $[IL_TAX_EXPECTED] — withholding closely matches liability
+- Expected IL tax on `$[IL_WAGES]`: approximately `$[IL_TAX_EXPECTED]` — withholding closely matches liability
 - 35 ILCS 5/304 | Illinois Income Tax Act — Allocation and Apportionment: Nonresident individuals are taxed only on income from Illinois sources, including wages earned for services performed in Illinois.
 
 COMPLIANCE NOTE
-Illinois wages ($[IL_WAGES]) represent income actually earned while the filer was physically present in Illinois. Don't modify this figure. If the W-2 Box 16 figure appears inconsistent with actual days worked in Illinois, contact [EMPLOYER] payroll for a corrected W-2 before filing.
+Illinois wages (`$[IL_WAGES]`) represent income actually earned while the filer was physically present in Illinois. Don't modify this figure. If the W-2 Box 16 figure appears inconsistent with actual days worked in Illinois, contact `[EMPLOYER]` payroll for a corrected W-2 before filing.
 
 ## 4. New York Nonresident Compliance
 
 ### 4.1 Filing Obligation
 
 NY Publication 88 | General Tax Information for New York State Nonresidents: Nonresidents who earn New York source income must file Form IT-203.
-The filer must file New York Form IT-203 (nonresident) because [EMPLOYER] withheld New York income tax ($[NY_WITHHELD]), confirming NY-source income was earned in 2025.
+The filer must file New York Form IT-203 (nonresident) because `[EMPLOYER]` withheld New York income tax (`$[NY_WITHHELD]`), confirming NY-source income was earned in 2025.
 
 ### 4.2 New York Wage Allocation — Critical Issue
 
 HIGH-RISK COMPLIANCE AREA
-The NY W-2 Box 16 shows $[W2_WAGES] (the full federal wage amount). This is NOT the correct NY-source wage figure. Entering the full W-2 Box 1 amount as NY wages would result in approximately $[NY_TAX_DIFFERENCE] in excess New York tax liability. The correct NY-sourced wage must be calculated from the withholding amount.
+The NY W-2 Box 16 shows `$[W2_WAGES]` (the full federal wage amount). This is NOT the correct NY-source wage figure. Entering the full W-2 Box 1 amount as NY wages would result in approximately `$[NY_TAX_DIFFERENCE]` in excess New York tax liability. The correct NY-sourced wage must be calculated from the withholding amount.
 
 Correct NY wage allocation methodology:
-- The NY withholding of $[NY_WITHHELD] divided by the applicable NY effective rate implies a NY-sourced wage of approximately $[NY_ALLOCATED_WAGES]
+- The NY withholding of `$[NY_WITHHELD]` divided by the applicable NY effective rate implies a NY-sourced wage of approximately `$[NY_ALLOCATED_WAGES]`
 - This figure should be entered as the NY nonresident wage in FreeTaxUSA's IT-203 section
-- If FreeTaxUSA generates an alert to revert to $[W2_WAGES], evaluate and override — the back-calculated figure is correct
+- If FreeTaxUSA generates an alert to revert to `$[W2_WAGES]`, evaluate and override — the back-calculated figure is correct
 
 NY Tax Law Section 631 | New York Source Income of a Nonresident Individual: For employees of multi-state employers, NY-source wages are determined by the ratio of days worked in NY to total days worked.
 NY IT-203-B Instructions | Allocation of Wages Earned Partly in and Partly Outside New York State: Use Form IT-203-B to allocate wages based on working days inside and outside New York.
@@ -124,7 +124,7 @@ New York imposes a graduated income tax on nonresident income from NY sources. K
 - $23,601 - $27,900: 5.25%
 - $27,901 - $161,550: 5.85%
 - $161,551 - $323,200: 6.85%
-- Above $323,200: 9.65% (but only on NY-sourced income of ~$[NY_ALLOCATED_WAGES])
+- Above $323,200: 9.65% (but only on NY-sourced income of ~`$[NY_ALLOCATED_WAGES]`)
 
 ## 5. Multi-Jurisdiction Compliance Matrix
 
@@ -137,10 +137,10 @@ New York imposes a graduated income tax on nonresident income from NY sources. K
 | 10% early IRA withdrawal penalty | Federal | IRC Section 72(t) | Required |
 | Net Investment Income Tax (Form 8960) | Federal | IRC Section 1411 | Conditional |
 | File IL Form IL-1040 (nonresident) | Illinois | 35 ILCS 5/502 | Required |
-| Report IL wages ($[IL_WAGES]) at 4.95% | Illinois | 35 ILCS 5/201 | Required |
+| Report IL wages (`$[IL_WAGES]`) at 4.95% | Illinois | 35 ILCS 5/201 | Required |
 | File NY Form IT-203 (nonresident) | New York | NY Tax Law Section 651 | Required |
 | NY wage allocation via IT-203-B | New York | NY Tax Law Section 631 | Required |
-| Override NY Box 16 auto-fill ($[W2_WAGES]) | New York | NY IT-203-B Instructions | Required |
+| Override NY Box 16 auto-fill (`$[W2_WAGES]`) | New York | NY IT-203-B Instructions | Required |
 | RSU adjusted cost basis verification | Federal | IRS Pub 525 / IRC Section 83 | Required |
 | Wash sale rule compliance | Federal | IRC Section 1091 | Conditional |
 | Qualified dividend holding period check | Federal | IRS Pub 550 | Conditional |
@@ -155,17 +155,17 @@ New York imposes a graduated income tax on nonresident income from NY sources. K
 4. E-file all three returns simultaneously if possible to minimize processing delays
 
 **Pre-Filing Checklist**
-- 1099-B received from [BROKERAGE] and all RSU lot transactions verified
+- 1099-B received from `[BROKERAGE]` and all RSU lot transactions verified
 - RSU cost basis confirmed as adjusted (stepped-up) basis per vesting event
 - Form 8949 entries reviewed for correct short-term vs. long-term classification
-- NY wage figure back-calculated and entered correctly (~$[NY_ALLOCATED_WAGES], not $[W2_WAGES])
-- IL wage figure confirmed at $[IL_WAGES] per W-2 Box 16
+- NY wage figure back-calculated and entered correctly (~`$[NY_ALLOCATED_WAGES]`, not `$[W2_WAGES]`)
+- IL wage figure confirmed at `$[IL_WAGES]` per W-2 Box 16
 - Prior-year AGI field set to $0 for federal e-file identity verification
-- 10% IRA penalty calculated ($[IRA_PENALTY]) and exceptions reviewed
+- 10% IRA penalty calculated (`$[IRA_PENALTY]`) and exceptions reviewed
 - All document sources uploaded to Tax Assistant knowledge base
 - Audit risk review completed for each Schedule D entry
 - FreeTaxUSA final review alerts evaluated and resolved with documented rationale
 
 ---
 
-Tax Assistant Compliance Guidelines  |  Tax Year 2025  |  Confidential  |  [FILER_NAME]  |  March 2026
+Tax Assistant Compliance Guidelines  |  Tax Year 2025  |  Confidential  |  `[FILER_NAME]`  |  March 2026
