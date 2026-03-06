@@ -474,7 +474,7 @@ KNOWLEDGE_BASE_DIR=./knowledge_base/
 
 **Installation:**
 ```bash
-git clone https://github.com/your-org/tax-assistant
+git clone https://github.com/mitwilli-create/tax-assistant
 cd tax-assistant
 pip install -r requirements.txt
 cp .env.example .env
@@ -692,7 +692,7 @@ Assistant: Different field, different rule. Let me be precise:
 **Interaction flow:**
 ```
 User:      How do I know if Schwab reported the right cost basis on my 1099-B?
-Assistant: Great question — RSU cost basis errors are one of the most common
+Assistant: RSU cost basis errors are one of the most common
            and expensive mistakes in tech employee tax filings. Here's the check:
            
            1. Find your RSU vesting confirmations (from Schwab or Google's equity portal)
