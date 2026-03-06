@@ -90,7 +90,10 @@ New York Nonresident (IT-203)        ← W-2 Box 17: $[NY_WITHHELD] withheld | A
 Washington State                     ← No income tax; current domicile
 ```
 
-**Critical NY allocation insight:** Box 16 for NY shows $[W2_WAGES] (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. The correct NY-sourced wage figure (~$[NY_ALLOCATED_WAGES]) is back-calculated from the $[NY_WITHHELD] withholding amount. Accepting the W-2 face value would generate ~$[NY_TAX_DIFFERENCE] in excess NY tax liability.
+**Critical NY allocation insight:** 
+Box 16 for NY shows $[W2_WAGES] (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. 
+The correct NY-sourced wage figure (~$[NY ALLOCATED WAGES]) is back-calculated from the $[NY WITHHELD] withholding amount. 
+Accepting the W-2 face value would generate ~$[NY TAX DIFFERENCE] in excess NY tax liability.
 
 ---
 
