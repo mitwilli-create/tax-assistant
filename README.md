@@ -1,9 +1,8 @@
 # Tax Assistant
 
-A personal tax filing system built inside Claude Projects. Four-layer architecture using Claude as both the reasoning engine and the external state store. Built for a complex multi-state return under tight timing constraints — and designed to treat every software suggestion as a starting point for verification, not a conclusion.
+This system caught a $19,000 state income tax error that filing software pre-filled with confidence — and then defended when questioned. Built in one ~8-hour session inside Claude Projects.
 
-**Built in:** One intensive session (~8 hours)  
-**Key outcome:** Caught a $[NY_TAX_DIFFERENCE] state income tax error that the filing software pre-filled with confidence and then defended when questioned.
+A **four-layer knowledge base architecture** using Claude as both the reasoning engine and external state store. Designed for a complex multi-state return under tight timing constraints, where every software suggestion is a starting point for verification, not a conclusion.
 
 ## The problem
 

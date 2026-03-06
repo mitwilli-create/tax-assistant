@@ -5,7 +5,7 @@ Primary Tester: [FILER_NAME]  |  Tax Year: 2025  |  Platform: Claude Projects
 
 ## Testing Overview
 
-This document compiles feedback gathered during beta testing of the Tax Assistant across the 2025 tax filing season (October 2025 through March 2026). Testing spanned multiple multi-session workflows including document ingestion, multi-state wage allocation, RSU cost basis reconciliation, and FreeTaxUSA platform integration. Feedback is synthesized from session logs, in-session correction events, and post-session reflection notes.
+The highest-impact result: the system caught a ~$19,000 NY state tax overpayment before filing. This document compiles feedback from beta testing across the 2025 tax filing season (October 2025 through March 2026), covering document ingestion, multi-state wage allocation, RSU cost basis reconciliation, and FreeTaxUSA integration. Sourced from session logs, in-session corrections, and post-session reflection notes.
 
 | Sessions Logged | Documents Processed | Errors Caught by User | States Filed |
 |---|---|---|---|

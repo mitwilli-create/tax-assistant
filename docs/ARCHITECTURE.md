@@ -1,6 +1,6 @@
-# 🧾 AI Tax Assistant — Claude Projects Implementation
+# AI Tax Assistant — Claude Projects Implementation
 
-> A practitioner-level demonstration of using Claude Projects as a structured, stateful tax preparation assistant for multi-state filers with complex compensation (RSUs, early IRA distributions, multi-state W-2 allocation).
+> **TL;DR:** This system caught a ~$19,000 state income tax error by pre-computing multi-state wage allocations before filing day. Four-layer KB architecture built on Claude Projects, with mandatory IRS citations and a placeholder convention that forces unknowns to surface instead of getting estimated away.
 
 ---
 
@@ -22,7 +22,7 @@
 
 ### System Design Philosophy
 
-The Tax Assistant is built on **Claude Projects** (claude.ai), leveraging its persistent knowledge base as an external state store. Rather than relying on in-context memory within a single conversation, the system externalizes all document state, computed reference values, and filing-session decisions to a structured file set — enabling multi-session workflows with minimal cognitive load at execution time.
+The Tax Assistant is built on **Claude Projects** (claude.ai), using its persistent knowledge base as an external state store. Instead of relying on in-context memory within a single conversation, the system externalizes all document state, computed reference values, and filing-session decisions to a structured file set — enabling multi-session workflows with minimal cognitive load at execution time.
 
 The guiding design principle: **pre-compute everything so that filing day is a 15-minute copy-paste session**, not a decision-making exercise.
 
@@ -31,7 +31,7 @@ The guiding design principle: **pre-compute everything so that filing day is a 1
 ### Four-Layer Knowledge Base Structure
 
 ```
-📁 Claude Project Knowledge Base
+Claude Project Knowledge Base
 │
 ├── Layer 1: Raw Source Documents        ← Ground truth; never modified
 │   ├── 2025_W2_[EMPLOYER]_final.pdf
@@ -202,7 +202,7 @@ Total Federal Tax Withheld:    $[TOTAL_FED_WITHHELD]
 
 ## API / Integration Reference
 
-> **Note:** This project runs natively on Claude Projects (claude.ai) and does not expose HTTP API endpoints in the traditional sense. The sections below document the integration surface for developers who want to replicate this architecture via the Anthropic Messages API or build tooling around it.
+> **Note:** This project runs natively on Claude Projects (claude.ai) and doesn't expose HTTP API endpoints in the traditional sense. The sections below document the integration surface for developers who want to replicate this architecture via the Anthropic Messages API or build tooling around it.
 
 ---
 
@@ -551,7 +551,7 @@ def verify_tax_estimate(taxable_income: float, assistant_estimate: float, tolera
 
 ### 3. Multi-State Allocation Consistency Test
 
-Verify that state-allocated wages do not exceed federal wages and that allocation methodology is internally consistent:
+Verify that state-allocated wages don't exceed federal wages and that allocation methodology is internally consistent:
 
 ```python
 def test_state_allocation_consistency(federal_wages, il_wages, ny_wages_allocated):
@@ -657,8 +657,8 @@ Assistant: No — the alert should be evaluated independently. The alert is reco
 User:      You said to enter $0 for prior-year AGI. IL is also asking for AGI. Same answer?
 Assistant: Different field, different rule. Let me be precise:
            - Federal e-file identity verification field: Enter $0
-             Reason: IRS has not processed your 2024 return, so $0 is the
-             correct signal that the prior-year return is not in their system
+             Reason: IRS hasn't processed your 2024 return, so $0 is the
+             correct signal that the prior-year return isn't in their system
            - Illinois AGI field: Enter your actual 2024 AGI
              Reason: IL uses this figure for tax calculation, not identity
              verification. Entering $0 here would corrupt your IL return.
@@ -732,14 +732,14 @@ Assistant: RSU cost basis errors are one of the most common
 
 ## Contributing
 
-Contributions are welcome in the following areas:
+Areas where contributions would help most:
 
 - **State tax modules** — Guidance documents for additional nonresident states (CA, MA, NJ, etc.)
 - **Document parsers** — Utilities to extract structured data from common tax PDF formats
 - **Citation validators** — Tools to verify IRS publication references
 - **KB templates** — Generalized knowledge base structures for other tax situations (self-employed, rental income, foreign income, etc.)
 
-Please open an issue before submitting a PR for substantive changes.
+Questions? Open an issue. For substantive changes, open an issue before submitting a PR.
 
 ---
 

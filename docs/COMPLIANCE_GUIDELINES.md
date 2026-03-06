@@ -4,7 +4,7 @@ Multi-Jurisdictional Tax Compliance Requirements  |  Version 1.0  |  Tax Year 20
 Prepared by: [FILER_NAME]  |  Filing Profile: WA Resident / IL & NY Nonresident
 
 DISCLAIMER
-This document is prepared for informational and organizational purposes in connection with the Tax Assistant project. It does not constitute legal or tax advice. Consult a licensed CPA or tax attorney for jurisdiction-specific compliance determinations. All IRS publication references reflect 2025 guidance and should be verified at irs.gov for any subsequent changes.
+This document is for informational and organizational purposes in connection with the Tax Assistant project. It doesn't constitute legal or tax advice. Consult a licensed CPA or tax attorney for jurisdiction-specific compliance determinations. All IRS publication references reflect 2025 guidance and should be verified at irs.gov for any subsequent changes.
 
 ## 1. Scope & Filing Profile
 
@@ -29,7 +29,7 @@ All income from all sources must be reported on Form 1040, regardless of whether
 **W-2 Wage Income**
 IRS Publication 525 | Taxable and Nontaxable Income: Wages, salaries, and tips are fully includible in gross income under IRC Section 61.
 - Box 1 wages ($[W2_WAGES]) are entered on Form 1040, Line 1a
-- Box 12 Code AA (Roth 401k contributions: $[ROTH_401K]) are post-tax and do not reduce Box 1
+- Box 12 Code AA (Roth 401k contributions: $[ROTH_401K]) are post-tax and don't reduce Box 1
 - Box 12 Code D (Traditional 401k: $[TRAD_401K]) is pre-tax and already excluded from Box 1
 - Box 12 Code DD (employer health coverage: $[HEALTH_COVERAGE]) is informational only — not taxable
 - Box 14 WAVPFLEE/WAVPMLEE are Washington state leave fund entries — not deductible federally
@@ -76,7 +76,7 @@ W-2 Box 5 Medicare wages are $[MEDICARE_WAGES], exceeding the $200,000 threshold
 ### 2.4 Prior Year AGI Verification
 
 SPECIAL SITUATION — 2024 RETURN PENDING
-The 2024 federal return has not been processed by the IRS as of March 2026. When e-filing the 2025 return, enter $0 in the prior-year AGI field used for e-file identity verification. This instruction applies ONLY to the federal e-file AGI field — it does not affect any state return fields or the actual AGI figures used in tax calculations.
+The 2024 federal return hasn't been processed by the IRS as of March 2026. When e-filing the 2025 return, enter $0 in the prior-year AGI field used for e-file identity verification. This instruction applies ONLY to the federal e-file AGI field — it doesn't affect any state return fields or the actual AGI figures used in tax calculations.
 
 ## 3. Illinois Nonresident Compliance
 
@@ -94,7 +94,7 @@ The filer is required to file Illinois Form IL-1040 (nonresident) because [EMPLO
 - 35 ILCS 5/304 | Illinois Income Tax Act — Allocation and Apportionment: Nonresident individuals are taxed only on income from Illinois sources, including wages earned for services performed in Illinois.
 
 COMPLIANCE NOTE
-Illinois wages ($[IL_WAGES]) represent income actually earned while the filer was physically present in Illinois. This figure should not be modified. If the W-2 Box 16 figure appears inconsistent with actual days worked in Illinois, contact [EMPLOYER] payroll for a corrected W-2 before filing.
+Illinois wages ($[IL_WAGES]) represent income actually earned while the filer was physically present in Illinois. Don't modify this figure. If the W-2 Box 16 figure appears inconsistent with actual days worked in Illinois, contact [EMPLOYER] payroll for a corrected W-2 before filing.
 
 ## 4. New York Nonresident Compliance
 

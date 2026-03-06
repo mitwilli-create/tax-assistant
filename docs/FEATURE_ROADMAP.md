@@ -3,9 +3,9 @@
 Strategic Development Plan  |  Version 1.0  |  March 2026
 Prepared by: [FILER_NAME]  |  Project: AI Tax Assistant (Claude Project)
 
-## Executive Summary
+## What this is
 
-The Tax Assistant is an AI-powered, multi-session tax preparation system built on Claude Projects, purpose-built to manage the complexity of multi-state filing, RSU income allocation, and year-over-year continuity. This roadmap outlines the planned development trajectory across three six-month phases — from a stable v1.0 baseline through a fully autonomous, compliance-aware v3.0 platform.
+The Tax Assistant already caught a ~$19,000 state tax error in v1.0. This roadmap covers what's next: three six-month phases taking the system from its current stable baseline through automated ingestion, proactive planning, and audit-ready compliance output. Built on Claude Projects, purpose-built for multi-state filing, RSU income allocation, and year-over-year continuity.
 
 ## Phase 1: Foundation & Accuracy (Q2–Q3 2026)
 
