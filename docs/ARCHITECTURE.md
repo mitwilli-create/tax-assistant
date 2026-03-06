@@ -34,9 +34,9 @@ The guiding design principle: **pre-compute everything so that filing day is a 1
 📁 Claude Project Knowledge Base
 │
 ├── Layer 1: Raw Source Documents        ← Ground truth; never modified
-│   ├── 2025_W2_Google_final.pdf
-│   ├── 2025_1099DIV_Schwab_dividends.pdf
-│   ├── 2025_1099R_Schwab_retirement.pdf
+│   ├── 2025_W2_[EMPLOYER]_final.pdf
+│   ├── 2025_1099DIV_[BROKERAGE]_dividends.pdf
+│   ├── 2025_1099R_[BROKERAGE]_retirement.pdf
 │   └── [1099-B when available]
 │
 ├── Layer 2: Historical Reference Data   ← Context and trend analysis
@@ -85,12 +85,12 @@ The tax situation requires nonresident returns for two states alongside the fede
 ```
 Federal (Form 1040)
     ↓ credits flow to
-Illinois Nonresident (IL-1040-NR)    ← W-2 Box 16: $42,031.41 | Withheld: $2,080.54
-New York Nonresident (IT-203)        ← W-2 Box 17: $680.28 withheld | Allocated: ~$10,000
+Illinois Nonresident (IL-1040-NR)    ← W-2 Box 16: $[IL_WAGES] | Withheld: $[IL_WITHHELD]
+New York Nonresident (IT-203)        ← W-2 Box 17: $[NY_WITHHELD] withheld | Allocated: ~$[NY_ALLOCATED_WAGES]
 Washington State                     ← No income tax; current domicile
 ```
 
-**Critical NY allocation insight:** Box 16 for NY shows $335,340.44 (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. The correct NY-sourced wage figure (~$10,000) is back-calculated from the $680.28 withholding amount. Accepting the W-2 face value would generate ~$19,000 in excess NY tax liability.
+**Critical NY allocation insight:** Box 16 for NY shows $[W2_WAGES] (full W-2 wages) — but this is a W-2 formatting artifact, not the taxable NY-sourced amount. The correct NY-sourced wage figure (~$[NY_ALLOCATED_WAGES]) is back-calculated from the $[NY_WITHHELD] withholding amount. Accepting the W-2 face value would generate ~$[NY_TAX_DIFFERENCE] in excess NY tax liability.
 
 ---
 
@@ -110,13 +110,13 @@ Washington State                     ← No income tax; current domicile
 
 **Structure:**
 ```
-W-2 Wages (Line 1):           $335,340.44
-Federal Tax Withheld (W-2):    $88,122.84
-Ordinary Dividends:               $195.00
-Qualified Dividends:              $195.00
-IRA Distribution (Taxable):       $333.33
-IRA Tax Withheld:                  $33.33
-Total Federal Tax Withheld:    $88,156.17
+W-2 Wages (Line 1):           $[W2_WAGES]
+Federal Tax Withheld (W-2):    $[FED_WITHHELD]
+Ordinary Dividends:               $[DIVIDENDS]
+Qualified Dividends:              $[DIVIDENDS]
+IRA Distribution (Taxable):       $[IRA_DIST]
+IRA Tax Withheld:                  $[IRA_PENALTY]
+Total Federal Tax Withheld:    $[TOTAL_FED_WITHHELD]
 ```
 
 **How it contributes:** Reduces filing-day cognitive load to near zero. The filer becomes an executor of a pre-verified plan rather than a decision-maker under time pressure.
@@ -142,11 +142,11 @@ Total Federal Tax Withheld:    $88,156.17
 **What it does:** When FreeTaxUSA (or any filing software) generates an alert or recommendation, the assistant evaluates it independently rather than deferring to the software's framing.
 
 **Documented example — NY Wage Alert:**
-- Software pre-filled: $335,340 as NY wages
-- Software issued alert recommending reversion to $335,340
-- Assistant analysis: Withholding of $680.28 implies ~3.4% effective rate on $20,000, or ~0.2% on $335,340 — the latter is implausible
-- Correct entry confirmed: ~$10,000 (back-calculated from withholding)
-- Stakes: Accepting the alert's recommendation would have generated ~$19,000 in excess NY tax
+- Software pre-filled: $[W2_WAGES] as NY wages
+- Software issued alert recommending reversion to $[W2_WAGES]
+- Assistant analysis: Withholding of $[NY_WITHHELD] implies ~[RATE]% effective rate on $20,000, or ~[RATE]% on $[W2_WAGES] — the latter is implausible
+- Correct entry confirmed: ~$[NY_ALLOCATED_WAGES] (back-calculated from withholding)
+- Stakes: Accepting the alert's recommendation would have generated ~$[NY_TAX_DIFFERENCE] in excess NY tax
 
 **How it contributes:** Treats software alerts as hypotheses, not authorities. Each alert gets its own independent analysis.
 
@@ -193,10 +193,10 @@ Total Federal Tax Withheld:    $88,156.17
 **What it does:** Synthesizes multi-year financial data into a single-page dashboard covering income trajectory, 401(k) growth, effective tax rates, net worth components, and millionaire-milestone projections.
 
 **Key metrics tracked:**
-- 8-year income CAGR: 13.2%
-- 2025 effective federal rate: 26.3%
+- 8-year income CAGR: [INCOME_CAGR]%
+- 2025 effective federal rate: [EFF_TAX_RATE]%
 - 401(k) balance trajectory (Q2 2023 → Q4 2025)
-- Net worth milestone progress ($500K by 2027, $1M by 2032)
+- Net worth milestone progress ($[NET_WORTH_1] by 2027, $[NET_WORTH_2] by 2032)
 
 ---
 
@@ -320,9 +320,9 @@ KNOWLEDGE_BASE_PATHS = [
     "2025_Tax_Filing_Prefill.md",
     "2024_IRS_Return_Status.md",
     "Financial_KPIs.md",
-    "2025_W2_Google_final.pdf",
-    "2025_1099DIV_Schwab_dividends.pdf",
-    "2025_1099R_Schwab_retirement.pdf",
+    "2025_W2_[EMPLOYER]_final.pdf",
+    "2025_1099DIV_[BROKERAGE]_dividends.pdf",
+    "2025_1099R_[BROKERAGE]_retirement.pdf",
 ]
 
 client = anthropic.Anthropic()
@@ -351,10 +351,10 @@ The Tax Assistant is designed to operate alongside FreeTaxUSA as the filing plat
 
 | Filing Software Field | Source in Assistant | Notes |
 |---|---|---|
-| W-2 Box 1 wages | `2025_Tax_Filing_Prefill.md` | $335,340.44 |
-| Federal tax withheld | Prefill doc | $88,156.17 (W-2 + 1099-R) |
-| IL state wages | W-2 Box 16 (IL row) | $42,031.41 — enter directly |
-| NY state wages | Back-calculated | ~$10,000 — NOT W-2 Box 16 |
+| W-2 Box 1 wages | `2025_Tax_Filing_Prefill.md` | $[W2_WAGES] |
+| Federal tax withheld | Prefill doc | $[TOTAL_FED_WITHHELD] (W-2 + 1099-R) |
+| IL state wages | W-2 Box 16 (IL row) | $[IL_WAGES] — enter directly |
+| NY state wages | Back-calculated | ~$[NY_ALLOCATED_WAGES] — NOT W-2 Box 16 |
 | Prior-year AGI (federal) | IRS workaround | $0 (2024 return unprocessed) |
 | Prior-year AGI (IL field) | Actual figure | Real AGI — different field, different rule |
 
@@ -382,12 +382,12 @@ The assistant operates under a conservative compliance posture with three tiers 
 **Illinois (Nonresident):**
 - IL nonresident files IL-1040-NR [86 Ill. Adm. Code 100.3020]
 - Wages sourced to IL based on actual days worked in state
-- IL Box 16 wages ($42,031.41) accepted as reported by employer
+- IL Box 16 wages ($[IL_WAGES]) accepted as reported by employer
 
 **New York (Nonresident):**
 - NY nonresident files IT-203 [NY Tax Law §631]
 - NY source income = wages earned while physically present in NY or attributable to NY work
-- W-2 Box 16 (NY) shows $335,340.44 — treated as formatting artifact; actual sourced amount ~$10,000
+- W-2 Box 16 (NY) shows $[W2_WAGES] — treated as formatting artifact; actual sourced amount ~$[NY_ALLOCATED_WAGES]
 - Withholding-implied allocation used as primary derivation method
 
 ### Audit Risk Assessment Protocol
@@ -399,8 +399,8 @@ For any position that deviates from a straightforward reading of a tax form, the
 3. **Precedent** — Is there IRS guidance or case law supporting the position?
 
 The NY wage allocation is assessed as **low audit risk** because:
-- The withholding-implied amount ($10,000 at ~7% effective rate) is entirely plausible
-- Google's payroll system generated the withholding based on actual NY work performed
+- The withholding-implied amount ($[NY_ALLOCATED_WAGES] at ~7% effective rate) is entirely plausible
+- [EMPLOYER]'s payroll system generated the withholding based on actual NY work performed
 - The filing will include full W-2 documentation showing the withholding basis
 
 ---
@@ -419,7 +419,7 @@ The $0 AGI workaround nearly propagated to the wrong field. This surfaced the ne
 
 **3. Uncertainty flagging builds trust**
 
-Users (Mitchell included) noted that explicit flagging of inferred vs. document-verified figures — rather than presenting all values with equal confidence — significantly increased trust in the outputs. "I know when to double-check" was cited as a key value.
+Users (the primary tester included) noted that explicit flagging of inferred vs. document-verified figures — rather than presenting all values with equal confidence — significantly increased trust in the outputs. "I know when to double-check" was cited as a key value.
 
 **4. Pre-computation reduces filing-day anxiety**
 
@@ -517,13 +517,13 @@ For each source document, verify that extracted values match the primary documen
 
 ```python
 EXTRACTION_TEST_CASES = [
-    {"field": "W2_Box1_Wages", "expected": 335340.44, "source": "W-2 Box 1"},
-    {"field": "W2_Box2_FedWithheld", "expected": 88122.84, "source": "W-2 Box 2"},
-    {"field": "W2_IL_Wages", "expected": 42031.41, "source": "W-2 Box 16 IL"},
-    {"field": "W2_NY_Withholding", "expected": 680.28, "source": "W-2 Box 17 NY"},
-    {"field": "DIV_1a_OrdinaryDiv", "expected": 195.00, "source": "1099-DIV Box 1a"},
-    {"field": "IRA_Gross", "expected": 333.33, "source": "1099-R Box 1"},
-    {"field": "IRA_FedWithheld", "expected": 33.33, "source": "1099-R Box 4"},
+    {"field": "W2_Box1_Wages", "expected": [W2_WAGES], "source": "W-2 Box 1"},
+    {"field": "W2_Box2_FedWithheld", "expected": [FED_WITHHELD], "source": "W-2 Box 2"},
+    {"field": "W2_IL_Wages", "expected": [IL_WAGES], "source": "W-2 Box 16 IL"},
+    {"field": "W2_NY_Withholding", "expected": [NY_WITHHELD], "source": "W-2 Box 17 NY"},
+    {"field": "DIV_1a_OrdinaryDiv", "expected": [DIVIDENDS], "source": "1099-DIV Box 1a"},
+    {"field": "IRA_Gross", "expected": [IRA_DIST], "source": "1099-R Box 1"},
+    {"field": "IRA_FedWithheld", "expected": [IRA_PENALTY], "source": "1099-R Box 4"},
 ]
 ```
 
@@ -558,7 +558,7 @@ def test_state_allocation_consistency(federal_wages, il_wages, ny_wages_allocate
     assert il_wages <= federal_wages, "IL wages cannot exceed federal wages"
     assert ny_wages_allocated <= federal_wages, "NY wages cannot exceed federal wages"
     # Verify NY back-calculation consistency
-    ny_withholding = 680.28
+    ny_withholding = [NY_WITHHELD]
     implied_rate = ny_withholding / ny_wages_allocated
     assert 0.04 <= implied_rate <= 0.10, f"Implied NY rate {implied_rate:.1%} is implausible"
 ```
@@ -585,7 +585,7 @@ def test_citations_present(response_text: str):
 
 | Test | Input | Expected | Fail condition |
 |---|---|---|---|
-| NY wage override | W-2 Box 16 NY = $335,340 | System flags; uses ~$10,000 | System accepts $335,340 |
+| NY wage override | W-2 Box 16 NY = $[W2_WAGES] | System flags; uses ~$[NY_ALLOCATED_WAGES] | System accepts $[W2_WAGES] |
 | AGI field scope | $0 AGI instruction | Applied to federal field only | Applied to IL AGI field |
 | Software alert | FreeTaxUSA alert to revert NY wages | Alert analyzed independently | Alert accepted without analysis |
 | IRA penalty check | 1099-R code 1 | 10% penalty flagged | Penalty missed |
@@ -596,13 +596,13 @@ def test_citations_present(response_text: str):
 
 ### Near-Term (Q2 2026)
 
-- **1099-B Integration:** Once the Schwab 1099-B arrives (~Feb 2026), add Form 8949 / Schedule D prefill generation to the pipeline. This includes wash sale adjustment tracking and RSU cost basis verification.
+- **1099-B Integration:** Once the [BROKERAGE] 1099-B arrives (~Feb 2026), add Form 8949 / Schedule D prefill generation to the pipeline. This includes wash sale adjustment tracking and RSU cost basis verification.
 - **Post-filing reconciliation doc:** After e-filing, generate a "what we filed" summary document capturing final values for all three returns (federal, IL, NY) for the project knowledge base.
 - **2024 return resolution tracking:** Update `2024_IRS_Return_Status.md` once the return processes; verify capital gains reporting matches the filed amounts.
 
 ### Medium-Term (2026 Tax Year Planning)
 
-- **W-4 optimization workflow:** Model 2026 withholding scenarios based on expected RSU vest schedule. Goal: achieve ~$3,000 refund (down from current ~$6,600 over-withholding).
+- **W-4 optimization workflow:** Model 2026 withholding scenarios based on expected RSU vest schedule. Goal: achieve ~$[REFUND_TARGET] refund (down from current ~$[OVER_WITHHELD] over-withholding).
 - **Covered call income tracking:** As the covered call strategy generates premium income, add a tracking layer for short-term capital gains from options expiration/assignment.
 - **Quarterly estimated tax assessment:** Evaluate whether side income (if any consulting materializes) triggers estimated payment requirements.
 
@@ -619,30 +619,30 @@ def test_citations_present(response_text: str):
 
 ### Use Case 1: Multi-State W-2 Wage Allocation
 
-**Situation:** Taxpayer receives a W-2 showing $335,340.44 as NY state wages (Box 16), but only worked in NY briefly in 2025.
+**Situation:** Taxpayer receives a W-2 showing $[W2_WAGES] as NY state wages (Box 16), but only worked in NY briefly in 2025.
 
-**Problem without assistant:** Filing software pre-fills NY wages at $335,340. Taxpayer may not recognize this as a formatting artifact rather than an accurate allocation. Filing with this figure generates ~$19,000 in excess NY tax.
+**Problem without assistant:** Filing software pre-fills NY wages at $[W2_WAGES]. Taxpayer may not recognize this as a formatting artifact rather than an accurate allocation. Filing with this figure generates ~$[NY_TAX_DIFFERENCE] in excess NY tax.
 
 **Interaction flow:**
 ```
-User:      FreeTaxUSA is showing $335,340 for NY wages. Is that right?
+User:      FreeTaxUSA is showing $[W2_WAGES] for NY wages. Is that right?
 ```
-User:      FreeTaxUSA is showing $335,340 for NY wages. Is that right?
+User:      FreeTaxUSA is showing $[W2_WAGES] for NY wages. Is that right?
 Assistant: That figure looks like a W-2 formatting artifact. Here's the analysis:
-           - NY withholding (Box 17): $680.28
-           - If NY wages were truly $335,340, the implied rate would be 0.2% — implausibly low
-           - Back-calculating: $680.28 / ~6.85% effective rate = ~$10,000 actual NY-sourced wages
-           - Recommendation: Enter ~$10,000 for NY wages, not $335,340
+           - NY withholding (Box 17): $[NY_WITHHELD]
+           - If NY wages were truly $[W2_WAGES], the implied rate would be [RATE]% — implausibly low
+           - Back-calculating: $[NY_WITHHELD] / ~[NY_EFF_RATE]% effective rate = ~$[NY_ALLOCATED_WAGES] actual NY-sourced wages
+           - Recommendation: Enter ~$[NY_ALLOCATED_WAGES] for NY wages, not $[W2_WAGES]
            [IRS Pub. 519; NY IT-203 Instructions]
 
-User:      FreeTaxUSA just sent an alert recommending I revert to $335,340. Should I?
+User:      FreeTaxUSA just sent an alert recommending I revert to $[W2_WAGES]. Should I?
 Assistant: No — the alert should be evaluated independently. The alert is recommending the
            W-2 face value, but as we established, that's a payroll formatting convention
-           not an allocation. Your withholding of $680.28 is the primary evidence of
-           actual NY-sourced income. The ~$10,000 figure remains the correct entry.
+           not an allocation. Your withholding of $[NY_WITHHELD] is the primary evidence of
+           actual NY-sourced income. The ~$[NY_ALLOCATED_WAGES] figure remains the correct entry.
 ```
 
-**Value delivered:** ~$19,000 in avoided excess NY tax liability. The key behavior is treating the software alert as a hypothesis, not an authority.
+**Value delivered:** ~$[NY_TAX_DIFFERENCE] in avoided excess NY tax liability. The key behavior is treating the software alert as a hypothesis, not an authority.
 
 ---
 
@@ -691,15 +691,15 @@ Assistant: Different field, different rule. Let me be precise:
 
 **Interaction flow:**
 ```
-User:      How do I know if Schwab reported the right cost basis on my 1099-B?
+User:      How do I know if [BROKERAGE] reported the right cost basis on my 1099-B?
 Assistant: RSU cost basis errors are one of the most common
            and expensive mistakes in tech employee tax filings. Here's the check:
            
-           1. Find your RSU vesting confirmations (from Schwab or Google's equity portal)
+           1. Find your RSU vesting confirmations (from [BROKERAGE] or [EMPLOYER]'s equity portal)
            2. For each lot sold, the cost basis should equal:
               (# shares vested) x (closing price on vest date)
            3. This amount should already appear in your W-2 Box 1 wages
-           4. If Schwab shows $0 or a lower basis, your 1099-B is incorrect
+           4. If [BROKERAGE] shows $0 or a lower basis, your 1099-B is incorrect
            5. You can still file correctly by entering the right basis on Form 8949
               and noting "basis reported to IRS is incorrect"
            
@@ -709,7 +709,7 @@ Assistant: RSU cost basis errors are one of the most common
            each lot against your RSU_Vesting_History.xlsx.
 ```
 
-**Value delivered:** Prevented double-taxation on RSU income by ensuring correct cost basis is reported even when Schwab's automated reporting may understate it.
+**Value delivered:** Prevented double-taxation on RSU income by ensuring correct cost basis is reported even when [BROKERAGE]'s automated reporting may understate it.
 
 ---
 
@@ -720,11 +720,11 @@ Assistant: RSU cost basis errors are one of the most common
 **Problem without assistant:** Data is scattered across 8+ Excel files covering paycheck history, 401(k) contributions, brokerage statements, and RSU vesting records.
 
 **Output:** The `Financial_KPIs.md` document synthesizes:
-- 8-year income CAGR (13.2% from $140K to $335K)
+- 8-year income CAGR ([INCOME_CAGR]% from $[PRIOR_INCOME] to $[W2_WAGES])
 - 401(k) trajectory with projected balance at retirement
-- Effective tax rate trend (22.7% average; 26.3% in 2025)
-- Net worth milestone timeline ($500K by 2027, $1M by ~2032–2035)
-- Washington state tax savings vs. prior IL residency (~$20K+/year)
+- Effective tax rate trend ([AVG_EFF_RATE]% average; [EFF_TAX_RATE]% in 2025)
+- Net worth milestone timeline ($[NET_WORTH_1] by 2027, $[NET_WORTH_2] by ~2032–2035)
+- Washington state tax savings vs. prior IL residency (~$[STATE_TAX_SAVINGS]+/year)
 
 **Value delivered:** A single-page financial dashboard derived from the same documents used for tax preparation, with no additional data entry required.
 

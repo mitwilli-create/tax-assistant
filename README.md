@@ -3,7 +3,7 @@
 A personal tax filing system built inside Claude Projects. Four-layer architecture using Claude as both the reasoning engine and the external state store. Built for a complex multi-state return under tight timing constraints — and designed to treat every software suggestion as a starting point for verification, not a conclusion.
 
 **Built in:** One intensive session (~8 hours)  
-**Key outcome:** Caught a $19,000 state income tax error that the filing software pre-filled with confidence and then defended when questioned.
+**Key outcome:** Caught a $[NY_TAX_DIFFERENCE] state income tax error that the filing software pre-filled with confidence and then defended when questioned.
 
 ## The problem
 
@@ -27,13 +27,13 @@ Key derived facts — multi-state allocation calculations, basis tracking decisi
 **4. User-provided corrections**
 Explicit overrides logged to persistent memory. Prior errors don't carry forward.
 
-## The $19,000 catch
+## The $[NY_TAX_DIFFERENCE] catch
 
 The filing software pre-filled a state income field with the full federal W-2 figure instead of the actual state-sourced income — a common error for RSU income allocated across multiple states based on work location during the vesting period.
 
-- **Pre-filled figure:** ~$335,000
-- **Correct state-sourced allocation:** ~$10,000
-- **Tax liability difference:** ~$19,000
+- **Pre-filled figure:** ~$[W2_WAGES]
+- **Correct state-sourced allocation:** ~$[NY_ALLOCATED_WAGES]
+- **Tax liability difference:** ~$[NY_TAX_DIFFERENCE]
 
 When I flagged it, the software generated an alert recommending I restore the pre-filled figure. The system identified the alert as incorrect, explained the multi-state allocation methodology, cited the relevant IRS guidance, and walked through the correct calculation.
 

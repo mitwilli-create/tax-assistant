@@ -1,7 +1,7 @@
 # Tax Assistant — User Feedback Compilation
 
 Beta Testing Summary  |  Version 1.0  |  March 2026
-Primary Tester: Mitchell Williams  |  Tax Year: 2025  |  Platform: Claude Projects
+Primary Tester: [FILER_NAME]  |  Tax Year: 2025  |  Platform: Claude Projects
 
 ## Testing Overview
 
@@ -31,35 +31,35 @@ Ratings assessed by the primary tester across key functional dimensions after th
 
 ### Positive Feedback — What Worked Well
 
-> "The assistant caught that FreeTaxUSA pre-filled $335,340 for NY wages when the correct figure was ~$10,000. That single catch would have cost me roughly $19,000 in excess tax liability. That's not a nice-to-have — that's the whole point."
-> — Mitchell Williams, Primary Tester    [Critical Error Prevention]
+> "The assistant caught that FreeTaxUSA pre-filled $[W2_WAGES] for NY wages when the correct figure was ~$[NY_ALLOCATED_WAGES]. That single catch would have cost me roughly $[NY_TAX_DIFFERENCE] in excess tax liability. That's not a nice-to-have — that's the whole point."
+> — [FILER_NAME], Primary Tester    [Critical Error Prevention]
 
 > "I appreciated that whenever a number was derived by inference rather than pulled directly from a document, the assistant said so explicitly. That's exactly the behavior I want — it makes me verify rather than trust blindly."
-> — Mitchell Williams, Primary Tester    [Uncertainty Transparency]
+> — [FILER_NAME], Primary Tester    [Uncertainty Transparency]
 
 > "The pre-computation approach was brilliant for my situation. I was recovering from surgery and needed to file with minimal cognitive load. Having every field value computed and ready to copy-paste made the filing session genuinely low-stress."
-> — Mitchell Williams, Primary Tester    [UX Design]
+> — [FILER_NAME], Primary Tester    [UX Design]
 
 > "When I asked about the $0 AGI field instruction, the assistant didn't just repeat the guidance — it explained exactly why it applied only to the federal identity-verification field and not to the Illinois AGI field. That distinction mattered."
-> — Mitchell Williams, Primary Tester    [Context Sensitivity]
+> — [FILER_NAME], Primary Tester    [Context Sensitivity]
 
 ### Constructive Feedback — Areas for Improvement
 
 > "Session continuity is the biggest friction point. Each new conversation requires re-uploading or re-summarizing the document set. A persistent state layer that survives session boundaries would cut setup time by 80%."
-> — Mitchell Williams, Primary Tester    [Session Continuity]
+> — [FILER_NAME], Primary Tester    [Session Continuity]
 
-> "The 1099-B still requires fully manual entry. Every RSU lot transaction has to be typed in by hand. Automated ingestion from a Schwab CSV or structured PDF would be a major quality-of-life improvement."
-> — Mitchell Williams, Primary Tester    [Automation Gap]
+> "The 1099-B still requires fully manual entry. Every RSU lot transaction has to be typed in by hand. Automated ingestion from a [BROKERAGE] CSV or structured PDF would be a major quality-of-life improvement."
+> — [FILER_NAME], Primary Tester    [Automation Gap]
 
 > "IRS citations were hit-or-miss. Sometimes I got a specific publication and section number; other times just a general reference. Consistent, specific citations for every recommendation would make audit defense much stronger."
-> — Mitchell Williams, Primary Tester    [Citation Consistency]
+> — [FILER_NAME], Primary Tester    [Citation Consistency]
 
 ## Feedback Themes — Impact Analysis
 
 | Theme | Freq. | Impact | Effort | Recommended Action |
 |---|---|---|---|---|
 | Session state loss between conversations | High | High | High | Implement persistent knowledge base with auto-sync on session open |
-| Manual 1099-B entry burden | High | High | High | Build Schwab CSV/PDF automated ingestion pipeline |
+| Manual 1099-B entry burden | High | High | High | Build [BROKERAGE] CSV/PDF automated ingestion pipeline |
 | Inconsistent IRS citation specificity | Medium | Medium | Low | Require citation template for every tax rule mentioned |
 | Overgeneralization of field-specific instructions | Low | High | Low | Add field-scope validation: flag when an instruction is limited to one form or field |
 | Software alert ambiguity (FreeTaxUSA) | Medium | High | Medium | Build alert classification system with risk level and independent analysis |
@@ -82,4 +82,4 @@ Ratings assessed by the primary tester across key functional dimensions after th
 
 ---
 
-Tax Assistant User Feedback Compilation  |  Confidential  |  Mitchell Williams  |  March 2026
+Tax Assistant User Feedback Compilation  |  Confidential  |  [FILER_NAME]  |  March 2026

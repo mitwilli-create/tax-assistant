@@ -1,7 +1,7 @@
 # Tax Assistant — Feature Roadmap
 
 Strategic Development Plan  |  Version 1.0  |  March 2026
-Prepared by: Mitchell Williams  |  Project: AI Tax Assistant (Claude Project)
+Prepared by: [FILER_NAME]  |  Project: AI Tax Assistant (Claude Project)
 
 ## Executive Summary
 
@@ -15,7 +15,7 @@ Focus: Solidify the core filing workflow, eliminate manual data re-entry, and es
 
 | Phase | Features & Enhancements |
 |---|---|
-| 1.1 Q2 2026 | Automated 1099-B ingestion: parse Schwab CSV/PDF directly into pre-filled Form 8949 entries |
+| 1.1 Q2 2026 | Automated 1099-B ingestion: parse [BROKERAGE] CSV/PDF directly into pre-filled Form 8949 entries |
 | | RSU lot-by-lot reconciliation tool: match W-2 Box 1 income to vesting events with cost-basis verification |
 | | Multi-state wage allocation calculator: formalize the NY/IL back-calculation methodology into a reusable module |
 | | Document completeness checker: flag missing or mismatched tax documents before filing session begins |
@@ -110,4 +110,4 @@ The following matrix summarizes all planned features by priority, implementation
 
 ---
 
-Tax Assistant Feature Roadmap  |  Confidential  |  Mitchell Williams  |  March 2026
+Tax Assistant Feature Roadmap  |  Confidential  |  [FILER_NAME]  |  March 2026
