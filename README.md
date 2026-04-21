@@ -12,6 +12,12 @@ A **four-layer knowledge base architecture** using Claude as both the reasoning 
 - **Scope:** Architecture and prompt design only — no personal tax data in this repo.
 - **Read next:** [architecture](docs/architecture.md).
 
+## What it looks like
+
+The system runs as a Claude Project, with the knowledge-base files pre-loaded before filing day. The system prompt and persona rules live in the Instructions panel; computed reference docs, historical data, and prior-year context all sit in the Files panel.
+
+![Tax Assistant Claude Project view](docs/images/01-claude-projects-kb.png)
+
 ## Example: the $19,000 catch
 
 **Context:** Multi-state return. Reviewing FreeTaxUSA pre-fill for New York nonresident wages.
@@ -36,6 +42,16 @@ A **four-layer knowledge base architecture** using Claude as both the reasoning 
 > No. The alert is recommending the W-2 face value, which we already established is a payroll formatting artifact. Your withholding of `$[NY_WITHHELD]` is the primary evidence of actual NY-sourced income. Keep the ~`$[NY_ALLOCATED_WAGES]` entry.
 
 **Outcome:** ~$19,000 in avoided excess NY tax. Filed on schedule.
+
+The actual exchange running in Claude:
+
+![NY wage catch conversation, part 1](docs/images/02-ny-catch-conversation-1.png)
+
+![NY wage catch conversation, part 2](docs/images/02-ny-catch-conversation-2.png)
+
+![NY wage catch conversation, part 3](docs/images/02-ny-catch-conversation-3.png)
+
+![NY wage catch conversation, part 4](docs/images/02-ny-catch-conversation-4.png)
 
 ## The problem
 
