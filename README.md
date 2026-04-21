@@ -4,6 +4,39 @@ This system caught a $19,000 state income tax error that filing software pre-fil
 
 A **four-layer knowledge base architecture** using Claude as both the reasoning engine and external state store. Designed for a complex multi-state return under tight timing constraints, where every software suggestion is a starting point for verification, not a conclusion.
 
+## In 60 seconds
+
+- **What it does:** Claude Projects-based tax assistant with a four-layer KB and mandatory IRS citations.
+- **Design:** Pre-computes filing-day values before the session, so filing becomes 15 minutes of copy-paste, not decision-making.
+- **Impact:** Caught a $19,000 state-income error that filing software pre-filled and defended.
+- **Scope:** Architecture and prompt design only — no personal tax data in this repo.
+- **Read next:** [architecture](docs/architecture.md).
+
+## Example: the $19,000 catch
+
+**Context:** Multi-state return. Reviewing FreeTaxUSA pre-fill for New York nonresident wages.
+
+**User:** FreeTaxUSA is showing `$[W2_WAGES]` for NY wages. Is that right?
+
+**Assistant:**
+> That's a W-2 formatting artifact, not your NY-sourced wages. Analysis:
+>
+> - NY withholding (Box 17): `$[NY_WITHHELD]`
+> - If NY wages were truly `$[W2_WAGES]`, implied rate would be `[LOW_RATE]`% — implausible for NY nonresident
+> - Back-calculating from withholding at the plausible NY effective rate: ~`$[NY_ALLOCATED_WAGES]` in NY-sourced income
+> - Enter `~$[NY_ALLOCATED_WAGES]`, not `$[W2_WAGES]`
+>
+> Stakes: ~`$[NY_TAX_DIFFERENCE]` in excess NY tax.
+>
+> [IRS Pub. 519; NY IT-203 Instructions]
+
+**User:** FreeTaxUSA just issued an alert recommending I revert to `$[W2_WAGES]`. Should I?
+
+**Assistant:**
+> No. The alert is recommending the W-2 face value, which we already established is a payroll formatting artifact. Your withholding of `$[NY_WITHHELD]` is the primary evidence of actual NY-sourced income. Keep the ~`$[NY_ALLOCATED_WAGES]` entry.
+
+**Outcome:** ~$19,000 in avoided excess NY tax. Filed on schedule.
+
 ## The problem
 
 Complex tax returns — multi-state income, RSU vesting events, 401k distributions, non-deductible IRA basis tracking — require holding a lot of interdependent information simultaneously while making decisions that are hard to reverse. Standard tax software hides the underlying logic and actively discourages questioning its outputs.
