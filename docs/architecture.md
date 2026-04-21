@@ -2,6 +2,8 @@
 
 > **TL;DR:** This system caught a ~$19,000 state income tax error by pre-computing multi-state wage allocations before filing day. Four-layer KB architecture built on Claude Projects, with mandatory IRS citations and a placeholder convention that forces unknowns to surface instead of getting estimated away.
 
+> **Scope note:** This document describes the system architecture. The repo does not contain a runnable Python implementation — the code examples in the "API / Integration Reference" section are illustrative, showing how you'd replicate this architecture via the Anthropic Messages API. The shipping implementation runs on Claude Projects (claude.ai); what this repo contains is the design, the prompt/persona specification, and the knowledge-base structure.
+
 ---
 
 ## Table of Contents
@@ -12,9 +14,8 @@
 4. [Tax Compliance Handling](#tax-compliance-handling)
 5. [User Feedback & Iteration](#user-feedback--iteration)
 6. [Deployment Instructions](#deployment-instructions)
-7. [Testing Procedures](#testing-procedures)
-8. [Future Development Plans](#future-development-plans)
-9. [Use Cases](#use-cases)
+7. [Future Development Plans](#future-development-plans)
+8. [Use Cases](#use-cases)
 
 ---
 
@@ -423,7 +424,7 @@ Users (the primary tester included) noted that explicit flagging of inferred vs.
 
 **4. Pre-computation reduces filing-day anxiety**
 
-Designing the workflow so that all decisions are made before filing day, and filing day is purely execution, was cited as the most practically valuable design choice. This was especially relevant given the recovery context (post-surgery filing window).
+Designing the workflow so that all decisions are made before filing day, and filing day is purely execution, was cited as the most practically valuable design choice. This was especially relevant given tight timing constraints for the filing window.
 
 ### Iteration History
 
@@ -454,141 +455,6 @@ Designing the workflow so that all decisions are made before filing day, and fil
 **Advantages:** Zero infrastructure, persistent across sessions, no API key management, native PDF understanding.
 
 ---
-
-### Option B: API-Based Implementation
-
-**Prerequisites:**
-```
-- Python 3.11+
-- anthropic>=0.40.0
-- python-dotenv
-```
-
-**Environment variables:**
-```bash
-ANTHROPIC_API_KEY=sk-ant-...
-MODEL=claude-opus-4-5
-MAX_TOKENS=4096
-KNOWLEDGE_BASE_DIR=./knowledge_base/
-```
-
-**Installation:**
-```bash
-git clone https://github.com/mitwilli-create/tax-assistant
-cd tax-assistant
-pip install -r requirements.txt
-cp .env.example .env
-# Add your ANTHROPIC_API_KEY to .env
-python main.py
-```
-
-**Directory structure:**
-```
-tax-assistant/
-├── main.py                      # Entry point
-├── system_prompt.md             # Tax assistant persona
-├── knowledge_base/
-│   ├── source_docs/             # Raw PDFs (W-2, 1099s)
-│   ├── historical/              # Excel history files
-│   ├── computed/                # Prefill docs, KPI dashboard
-│   └── status/                  # IRS status, inventory
-├── utils/
-│   ├── document_loader.py       # KB file → API document blocks
-│   └── citation_checker.py     # Validates IRS citations in responses
-└── requirements.txt
-```
-
-**Dependencies (`requirements.txt`):**
-```
-anthropic>=0.40.0
-python-dotenv>=1.0.0
-openpyxl>=3.1.0           # Excel file reading
-pypdf>=4.0.0              # PDF text extraction for preprocessing
-rich>=13.0.0              # Terminal formatting
-```
-
----
-
-## Testing Procedures
-
-### 1. Document Extraction Accuracy Tests
-
-For each source document, verify that extracted values match the primary document:
-
-```python
-EXTRACTION_TEST_CASES = [
-    {"field": "W2_Box1_Wages", "expected": [W2_WAGES], "source": "W-2 Box 1"},
-    {"field": "W2_Box2_FedWithheld", "expected": [FED_WITHHELD], "source": "W-2 Box 2"},
-    {"field": "W2_IL_Wages", "expected": [IL_WAGES], "source": "W-2 Box 16 IL"},
-    {"field": "W2_NY_Withholding", "expected": [NY_WITHHELD], "source": "W-2 Box 17 NY"},
-    {"field": "DIV_1a_OrdinaryDiv", "expected": [DIVIDENDS], "source": "1099-DIV Box 1a"},
-    {"field": "IRA_Gross", "expected": [IRA_DIST], "source": "1099-R Box 1"},
-    {"field": "IRA_FedWithheld", "expected": [IRA_PENALTY], "source": "1099-R Box 4"},
-]
-```
-
-### 2. Tax Calculation Verification Tests
-
-Run parallel calculations against IRS tax tables to verify computed estimates:
-
-```python
-# 2025 Single filer tax brackets
-BRACKETS_2025 = [
-    (11925, 0.10),
-    (48475, 0.12),
-    (103350, 0.22),
-    (197300, 0.24),
-    (250525, 0.32),
-    (626350, 0.35),
-    (float('inf'), 0.37),
-]
-
-def verify_tax_estimate(taxable_income: float, assistant_estimate: float, tolerance: float = 100):
-    computed = calculate_tax(taxable_income, BRACKETS_2025)
-    delta = abs(computed - assistant_estimate)
-    assert delta <= tolerance, f"Tax estimate off by ${delta:.2f}"
-```
-
-### 3. Multi-State Allocation Consistency Test
-
-Verify that state-allocated wages don't exceed federal wages and that allocation methodology is internally consistent:
-
-```python
-def test_state_allocation_consistency(federal_wages, il_wages, ny_wages_allocated):
-    assert il_wages <= federal_wages, "IL wages cannot exceed federal wages"
-    assert ny_wages_allocated <= federal_wages, "NY wages cannot exceed federal wages"
-    # Verify NY back-calculation consistency
-    ny_withholding = [NY_WITHHELD]
-    implied_rate = ny_withholding / ny_wages_allocated
-    assert 0.04 <= implied_rate <= 0.10, f"Implied NY rate {implied_rate:.1%} is implausible"
-```
-
-### 4. Citation Presence Tests
-
-Verify that all tax rule assertions include IRS citations:
-
-```python
-import re
-
-def test_citations_present(response_text: str):
-    # Every paragraph containing a tax rule should cite a source
-    rule_patterns = [r'\d+%', r'deduct', r'withheld', r'taxable', r'penalty']
-    citation_pattern = r'\[IRS|IRC §|Publication \d+'
-    
-    for pattern in rule_patterns:
-        if re.search(pattern, response_text, re.IGNORECASE):
-            assert re.search(citation_pattern, response_text), \
-                f"Tax rule referenced without citation: pattern '{pattern}'"
-```
-
-### 5. Regression Tests — Known Edge Cases
-
-| Test | Input | Expected | Fail condition |
-|---|---|---|---|
-| NY wage override | W-2 Box 16 NY = `$[W2_WAGES]` | System flags; uses ~`$[NY_ALLOCATED_WAGES]` | System accepts `$[W2_WAGES]` |
-| AGI field scope | $0 AGI instruction | Applied to federal field only | Applied to IL AGI field |
-| Software alert | FreeTaxUSA alert to revert NY wages | Alert analyzed independently | Alert accepted without analysis |
-| IRA penalty check | 1099-R code 1 | 10% penalty flagged | Penalty missed |
 
 ---
 
@@ -669,7 +535,7 @@ Assistant: Different field, different rule. Let me be precise:
 
 ### Use Case 3: Low-Cognitive-Load Filing Day
 
-**Situation:** Filer is in post-surgery recovery. Needs to file three returns (federal, IL, NY) with minimal decision-making.
+**Situation:** Filer needs to file three returns (federal, IL, NY) under tight timing constraints, with minimal active decision-making required during the session itself.
 
 **Problem without assistant:** A complex multi-state filing with RSUs, multi-state allocation questions, and an IRS processing issue in the background would normally require significant active problem-solving during the filing session.
 
@@ -725,19 +591,6 @@ Assistant: RSU cost basis errors are one of the most common
 - Washington state tax savings vs. prior IL residency (~`$[STATE_TAX_SAVINGS]`+/year)
 
 **Value delivered:** A single-page financial dashboard derived from the same documents used for tax preparation, with no additional data entry required.
-
----
-
-## Contributing
-
-Areas where contributions would help most:
-
-- **State tax modules** — Guidance documents for additional nonresident states (CA, MA, NJ, etc.)
-- **Document parsers** — Utilities to extract structured data from common tax PDF formats
-- **Citation validators** — Tools to verify IRS publication references
-- **KB templates** — Generalized knowledge base structures for other tax situations (self-employed, rental income, foreign income, etc.)
-
-Questions? Open an issue. For substantive changes, open an issue before submitting a PR.
 
 ---
 
