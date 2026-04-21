@@ -102,7 +102,6 @@ Filing day has enough cognitive load. Pre-computing all calculable values means 
 
 - Identified non-deductible IRA basis issue (Form 8606) — recommended and executed Roth conversion
 - Saved 10+ hours vs. CPA or traditional filing
-- Filed on schedule despite tight post-surgery timing
 
 ## What's not here
 
